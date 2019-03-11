@@ -1,0 +1,50 @@
+type User {
+	_id: ID
+	username: String! @unique
+	email: String!
+	password: String!
+	avatar: String
+	created_at: String
+	modify_at: String
+	board: [Board]
+}
+
+type Board {
+	_id: ID
+	title: String!
+	imageUrl: String
+	created_at: String
+	favorite: Boolean
+	createdBy: User!
+	# collaborators: [User]
+	# list: [List]
+}
+
+type List {
+	title: String!
+	card: [Card]
+}
+
+type Card {
+	_id: ID
+	title: String!
+	description: String!
+	status: String!
+	comments: String
+	expired: String
+}
+
+type Token {
+	token: String!
+}
+
+type Query {
+	getCurrentUser: User
+	getBoard: [Board]
+}
+
+type Mutation {
+	addBoard(title: String!, creatorId: ID!): Board!
+	signinUser(username: String!, password: String!): Token
+	signupUser(username: String!, email: String!, password: String!): Token
+}
