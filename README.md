@@ -4,26 +4,12 @@
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+### Compiles and run
 ```
-npm run serve
+npm run dev (compile the server and the client)
+For the graphql: localhost:4000
+For the client: localhost:8080
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Create and configure the variables.env to run the database
+Need : MONGO_URI(i used mLAB they provide de uri, if used local mongodb database used your localhost:xxxx predefined ) and SECRET(this variable can have any string)
