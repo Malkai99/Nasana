@@ -1,6 +1,6 @@
 <template>
-	
-    <v-container text-xs-center >
+	  
+    <v-container fluid grid-list-lg text-xs-center>
     	<h1>Tableros</h1>
 		
 		<!-- LOADING SPINNER -->
@@ -14,19 +14,39 @@
 		  </v-dialog>
 		</v-layout>
 
-	  <v-flex xs12>
-	  	<!-- <v-carousel v-if="!loading && boards.length > 0" v-bind="{ 'cycle': true }" interval="3000">
-	  		<v-carousel-item v-if="board in boards" :key="board._id">
+	  <!-- <v-flex xs12> -->
+
+	  	<!-- Carrusel -->
+	  <!-- 	<v-carousel v-if="!loading && boards.length > 0" v-bind="{ 'cycle': true }" interval="3000">
+	  		<v-carousel-item v-for="board in boards" :key="board._id" :src="board.imageUrl">
 	  			<h1 id="carosuel__title">{{ board.title }}</h1>  	
 	  		</v-carousel-item>
 	  	  
 	  	</v-carousel> -->
-	  	<ul v-if="!loading" v-for="board in boards"  :key="board._in ">
-	  		<li id="carosuel__title">{{board.title}} 
-	  		<br>
-	  		creado por:  {{board.createdBy.username}}</li>
-	  	</ul>
-	  </v-flex>
+
+	  	<!-- Cards -->
+	  	<br>
+	  		<v-flex xs12 >
+	  			<v-layout align-center justify-center column fill-height>
+	  				<v-carousel  v-if="!loading && boards.length > 0">
+	  				  <v-carousel-item v-for="board in boards" :src="board.imageUrl">
+	  				  	<h1 id="carosuel__title">{{ board.title }}</h1>	
+	  				  	<v-card id="card" height="76.6%" :key="board._id">
+	  				  		<div>
+						  	  <v-card-title primary-title>
+						  	    {{board.title}}
+						  	  </v-card-title>
+	  				  		</div>
+					  	  <v-card-actions>
+					  	    <v-btn id="verMas" @click.native="goToBoard(board._id )" flat color="info">Ver mas...</v-btn>
+					  	  </v-card-actions>
+				  	</v-card>
+	  				  </v-carousel-item>
+	  				</v-carousel>
+	  			</v-layout>
+	  		</v-flex>
+
+	  <!-- </v-flex> -->
 	</v-container>
 </template>
 
@@ -45,13 +65,16 @@
     methods: {
     	handleGetCarouselBoards(){
     		this.$store.dispatch("getBoards");
+    	},
+    	goToBoard(boardId) {
+    		this.$router.push(`/boards/${boardId}`);
     	}
     }
 };
 </script>
 
 <style>
-	#carosuel__title{
+	#title{
 		/*position: absolute;*/
 		list-style-type: none;
 		background-color: black;
@@ -59,7 +82,28 @@
 		border-radius: 15px;
 		width: 20%;
 		height: 80px;
-		padding: 0.5em;
+		padding: 1em;
 		/*margin: 0 auto;*/
+	}
+	#carosuel__title{
+		position: absolute;
+		background-color: rgba(0,0,0,0.5);
+		color: white;
+		border-radius: 5px 5px 0 0;
+		padding: 0.5em;
+		margin: 0 auto;
+		bottom: 50px;
+		left: 0;
+		right: 0;
+	}
+	#card{
+		padding-left: 5em;
+		background-color: #CFCFD9;
+		color: black;
+	}
+	#verMas{
+		position: absolute;
+		bottom: 8px;
+		right: 16px;
 	}
 </style>
