@@ -15,6 +15,21 @@ export const GET_BOARDS = gql`
 			}
 `;
 
+export const GET_BOARDID = gql` 
+	query($boardId: ID!) {
+		getBoardId(boardId: $boardId){
+			_id
+			title
+			imageUrl
+			createdBy{
+				_id
+			}
+			favorite
+			created_at
+		}
+	}
+`;
+
 // USERS QUERIES
 export const GET_CURRENT_USER = gql`
 	query {
@@ -29,6 +44,21 @@ export const GET_CURRENT_USER = gql`
 `
 
 // BOARDS MUTATIONS
+
+export const ADD_BOARD = gql` 
+	mutation($title: String!, $imageUrl: String!, $createdBy: ID!) {
+  		addBoard(title: $title, imageUrl: $imageUrl, createdBy: $createdBy) {
+		    _id
+		    title
+		    imageUrl
+		    favorite
+		    createdBy {
+      			_id
+    		}
+   			 created_at
+ 		 }
+	} 
+`;
 
 // USER MUTATIONS
 export const SIGNIN_USER = gql`

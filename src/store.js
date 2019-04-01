@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost';
 import router from './router';
 
 // QUERIES IMPORT
-import { GET_CURRENT_USER, GET_BOARDS, SIGNIN_USER } from './queries';
+import { GET_CURRENT_USER, GET_BOARDS, ADD_BOARD, SIGNIN_USER, SIGNUP_USER } from './queries';
 
 
 Vue.use(Vuex)
@@ -14,7 +14,9 @@ export default new Vuex.Store({
   state: {
   	boards: [],
     user: null,
-  	loading: false
+  	loading: false,
+    error: null,
+    authError: null
   },
   mutations: {
   	setBoards: (state, payload) => {
@@ -26,7 +28,14 @@ export default new Vuex.Store({
     setLoading: (state, payload) => {
       state.loading = payload;
     },
-    clearUser: state => (state.user = null)
+    setError: (state, payload) => {
+      state.error = payload;
+    },
+    setAuthError: (state, payload) => {
+      state.authError = payload;
+    },
+    clearUser: state => (state.user = null),
+    clearError: state=> (state.error = null)
   },
   actions: {
     getCurrentUser: ({ commit }) => {
@@ -64,21 +73,77 @@ export default new Vuex.Store({
 
   			})
   	},
+    addBoard: ({commit}, payload) => {
+      apolloClient
+        .mutate({
+          mutation: ADD_BOARD,
+          variables: payload,
+          update: (cache, {data: {addBoard}}) => {
+            // Se lee el query que se quiere actualizar
+            const data = cache.readQuery({ query: GET_BOARDS});
+            // Crear los datos actualizados
+            data.getBoard.unshift(addBoard);
+            // Escribir los datos
+            cache.writeQuery({
+              query: GET_BOARDS,
+              data
+            });
+          },
+          optimisticResponse: {
+            __type: 'Mutation',
+            addBoard: {
+              __typename: 'Board',
+              __id: -1,
+              ...payload 
+            }
+          }
+        })
+        .then( ({data}) => {
+          console.log(data.addBoard);
+        })
+        .catch(err => {
+          console.error(err);
+        })
+    },
     signinUser: ({ commit }, payload) => {
-      //Para limpiar el token antes de enviar uno nuevo
-      localStorage.setItem('token', '');
+      commit('clearError');
+      commit('setLoading', true);
       apolloClient
         .mutate({
           mutation: SIGNIN_USER,
           variables: payload
         })
         .then( ({ data }) => {
+          commit('setLoading', false);
           localStorage.setItem("token", data.signinUser.token);
           //asegurar que el metodo created de main.js esta corriendo
           // se corre getCurrentUser al recargar la pagina
           router.go();
         })
         .catch(err => {
+          commit('setLoading', false);
+          commit('setError', err);
+          console.error(err);
+        });
+    },
+    signupUser: ({ commit }, payload) => {
+      commit('clearError');
+      commit('setLoading', true);
+      apolloClient
+        .mutate({
+          mutation: SIGNUP_USER,
+          variables: payload
+        })
+        .then( ({ data }) => {
+          commit('setLoading', false);
+          localStorage.setItem("token", data.signupUser.token);
+          //asegurar que el metodo created de main.js esta corriendo
+          // se corre getCurrentUser al recargar la pagina
+          router.go();
+        })
+        .catch(err => {
+          commit('setLoading', false);
+          commit('setError', err);
           console.error(err);
         });
     },
@@ -96,6 +161,8 @@ export default new Vuex.Store({
   getters: {
   	boards: state => state.boards,
     user: state => state.user,
-  	loading: state => state.loading
+  	loading: state => state.loading,
+    error: state => state.error,
+    authError: state => state.authError
   }
 })

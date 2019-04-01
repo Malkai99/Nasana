@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Board from './components/Board.vue';
+import BoardId from './components/BoardId.vue';
 import AddBoard from './components/AddBoard.vue';
 import Profile from './components/Auth/Profile.vue';
 import SignIn from './components/Auth/SignIn.vue';
@@ -25,9 +26,16 @@ export default new Router({
       component: Board
     },
     {
-      path: '/boards/add',
+      path: '/boards/:boardId',
+      name: 'BoardId',
+      component: BoardId,
+      props: true
+    },
+    {
+      path: '/board/add',
       name: 'AddBoard',
-      component: AddBoard
+      component: AddBoard,
+      beforeEnter: AuthGuard
     },
     {
       path: '/profile',

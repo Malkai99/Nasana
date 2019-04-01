@@ -4,9 +4,13 @@ import "./plugins/vuetify";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import FormAlert from "./components/shared/FormAlert";
 
 import ApolloClient from "apollo-boost";
 import VueApollo from "vue-apollo";
+
+//Registrar para usar en cualqueir parte
+Vue.component('form-alert', FormAlert);
 
 Vue.use(VueApollo);
 
@@ -39,6 +43,12 @@ export const defaultClient = new ApolloClient({
 		if(graphQLErrors){
 			for(let err of graphQLErrors){
 				console.dir(err);
+				if(err.name === "AuthenticationError"){
+					//Poner el error de auth en el state para el snackbar
+					store.commit('setAuthError', err);
+					//Finalizar sesion del usuario y limpar el token
+					store.dispatch('signoutUser');
+				}
 			}
 		}
 	}
