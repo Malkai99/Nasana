@@ -27,14 +27,22 @@ module.exports = {
 				model: 'User'
 			});
 			return boards;
+		},
+		getBoardId: async (_, {boardId}, { Board }) => {
+			const board = await Board.findOne({_id: boardId}).populate({
+				path: 'list.card',
+				model: "Card"
+			});
+			return board; 
 		}
 	},
 
 	Mutation: {
-		addBoard: async (_, {title, creatorId}, { Board }) => {
+		addBoard: async (_, {title,imageUrl,createdBy}, { Board }) => {
 			const newBoard = await new Board({
 				title,
-				createdBy : creatorId
+				imageUrl,
+				createdBy : createdBy
 			}).save();
 			return newBoard;
 		},

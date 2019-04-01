@@ -15,6 +15,7 @@ require('dotenv').config({ path: 'variables.env'});
 //REQUIRED MODELS
 const User = require('./models/User.js');
 const Board = require('./models/Board.js');
+const Card = require('./models/Card.js');
 
 //MONGOOSE DATABASE CONNECTION MLAB DATABASE
 mongoose
@@ -45,6 +46,10 @@ const getUser = async token => {
 const server = new ApolloServer({ 
 	typeDefs,
 	resolvers,
+	formatError: error => ({
+		name: error.name, 
+		message: error.message.replace('Context creation failed:', '')
+	}),
 	context: async ({ req }) => {
 			const token= req.headers["authorization"];
 			return { User, Board, currentUser: await getUser(token)};	

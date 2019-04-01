@@ -17,7 +17,7 @@ type Board {
 	favorite: Boolean
 	createdBy: User!
 	# collaborators: [User]
-	# list: [List]
+	list: [List]
 }
 
 type List {
@@ -38,13 +38,15 @@ type Token {
 	token: String!
 }
 
+
 type Query {
 	getCurrentUser: User
 	getBoard: [Board]
+	getBoardId(boardId: ID!): Board!
 }
 
 type Mutation {
-	addBoard(title: String!, creatorId: ID!): Board!
+	addBoard(title: String!,imageUrl: String, createdBy: ID!): Board!
 	signinUser(username: String!, password: String!): Token
 	signupUser(username: String!, email: String!, password: String!): Token
 }
