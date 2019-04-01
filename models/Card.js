@@ -15,12 +15,12 @@ const CardSchema = new 	mongoose.Schema({
 	},
 	comments: {
 		type: String
-	}
+	},
 	expired: {
 		type: Date
 	}
 
 
-})
+});
 
 module.exports = mongoose.model('Card', CardSchema);

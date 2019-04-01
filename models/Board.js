@@ -20,23 +20,23 @@ const BoardSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		required: true,
 		ref: 'User'
-	}
+	},
 	// collaborators: {
 	// 	type: mongoose.Schema.Types.ObjectId,
 	// 	required: true,
 	// 	ref: 'User'
 	// },
-	// list: [{
-	// 	title: {
-	// 		type: String,
-	// 		required: true
-	// 	},
-	// 	card: {
-	// 		type: mongoose.Schema.Types.ObjectId,
-	// 		required: true,
-	// 		ref: 'Card'
-	// 	}
-	// }]
+	list: [{
+		title: {
+			type: String,
+			required: true
+		},
+		card: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'Card'
+		}
+	}]
 
 });
 
