@@ -55,7 +55,6 @@
        flex prepend-icon="search"
        placeholder="Buscador.." color="accent" single-line hide-details>
        </v-text-field> -->
-
        <!-- <v-spacer></v-spacer> -->
        
        <!-- Links -->
@@ -89,7 +88,8 @@
 
   <!-- Contenido de la App -->
     <main> 
-      <v-container class="mt-4">
+      <!-- <v-container class="mt-4"> -->
+
         <transition name="fade">
           
           <router-view/> 
@@ -109,8 +109,11 @@
           <v-btn dark flat to="/signin">Iniciar sesion</v-btn>
         </v-snackbar>
 
+      <!-- </v-container> -->
 
-      </v-container>
+      <!-- Footer -->
+
+
     </main>
 
   </v-app>
