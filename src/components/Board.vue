@@ -1,5 +1,6 @@
 <template>
-	  
+	<v-container class="mt-5">
+	    
     <v-container fluid grid-list-lg text-xs-center>
     	<h1>Tableros</h1>
 		
@@ -14,20 +15,10 @@
 		  </v-dialog>
 		</v-layout>
 
-	  <!-- <v-flex xs12> -->
-
-	  	<!-- Carrusel -->
-	  <!-- 	<v-carousel v-if="!loading && boards.length > 0" v-bind="{ 'cycle': true }" interval="3000">
-	  		<v-carousel-item v-for="board in boards" :key="board._id" :src="board.imageUrl">
-	  			<h1 id="carosuel__title">{{ board.title }}</h1>  	
-	  		</v-carousel-item>
-	  	  
-	  	</v-carousel> -->
-
 	  	<!-- Cards -->
 	  	<br>
 	  		<v-flex xs12 >
-	  			<v-layout align-center justify-center column fill-height>
+	  			<v-layout align-center justify-center column>
 	  				<v-carousel  v-if="!loading && boards.length > 0">
 	  				  <v-carousel-item v-for="board in boards" :src="board.imageUrl">
 	  				  	<h1 id="carosuel__title">{{ board.title }}</h1>	
@@ -46,8 +37,8 @@
 	  			</v-layout>
 	  		</v-flex>
 
-	  <!-- </v-flex> -->
 	</v-container>
+	  </v-container>
 </template>
 
 <script>
@@ -75,7 +66,7 @@
 
 <style>
 	#title{
-		/*position: absolute;*/
+		position: absolute;
 		list-style-type: none;
 		background-color: black;
 		color: white;
