@@ -67,4 +67,4 @@ typings/
 .serverless
 
 #Enviroment
-.env
+*.env
