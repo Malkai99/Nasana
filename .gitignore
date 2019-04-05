@@ -68,3 +68,4 @@ typings/
 
 #Enviroment
 *.env
+variables.env
