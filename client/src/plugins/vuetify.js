@@ -9,7 +9,7 @@ Vue.use(Vuetify, {
       accent: "#ff5722",
       error: "#f44336",
       warning: "#ffeb3b",
-      info: "#8bc34a",
+      info: "#2E86AB",
       success: "#08A045"
       }
 });

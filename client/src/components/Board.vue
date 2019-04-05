@@ -17,7 +17,7 @@
 	  	<!-- Cards -->
 	  	<br>
 	  		<v-flex xs12 >
-	  			<v-layout align-center justify-center column fill-height>
+	  			<v-layout align-center justify-center column>
 	  				<v-carousel  v-if="!loading && boards.length > 0">
 	  				  <v-carousel-item v-for="board in boards" :src="board.imageUrl">
 	  				  	<h1 id="carosuel__title">{{ board.title }}</h1>	
