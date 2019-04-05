@@ -25,19 +25,19 @@
 			    v-model="dialog"
 			    max-width="500px"
 			    transition="dialog-transition">
-
+	
 			  <v-card>
 
 			  	<v-card-title id="taskTitle" primary-title>
 			  		<h1>Añadir Tarea</h1>
 			  	</v-card-title>
 
-				<v-form  v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleSigninUser">
+				<v-form  v-model="isFormValid" lazy-validation ref="form" @submit.prevent="onSubmit">
 				<v-card-text>
 				  <v-text-field class="formTask" :rules="titleRules" prepend-icon="create" v-model="title" type="text"
-				   label="Tarea"></v-text-field>
+				   label="Tarea" required></v-text-field>
 				  <v-text-field class="formTask" :rules="descriptionRules" prepend-icon="assignment" 
-				  v-model="description" label="Descripcion"></v-text-field>
+				  v-model="description" label="Descripcion" required></v-text-field>
 				  <v-textarea class="formTask"
 				   auto-grow 
 				   prepend-icon="comment" :rules="commentsRules" v-model="comments" label="Comentarios" rows="1">
@@ -127,14 +127,14 @@ import { mapGetters } from 'vuex';
 				expired: "",
 				titleRules: [
 					title => !!title || 'El titulo es requerido',
-					title => title.lenght < 26 || 'El titulo debe ser menor a 25 caracteres'
+					title => title.length < 26 || 'El titulo debe ser menor a 25 caracteres'
 				],
 				descriptionRules: [
 					description => !!description || 'La descripcion es requerida',
-					description => description.lenght < 80 || 'La descripcion debe ser menor a 80 caracteres'
+					description => description.length < 80 || 'La descripcion debe ser menor a 80 caracteres'
 				],
 				commentsRules: [
-					comments => comments.lenght < 350 || 'Debe ser menor a 350 caracteres'
+					comments => comments.length < 350 || 'Debe ser menor a 350 caracteres'
 				]
 			}
 		},
@@ -163,8 +163,16 @@ import { mapGetters } from 'vuex';
 			goToPreviousPage() {
 				this.$router.go(-1);
 			},
-			gotoAddTask(){
-
+			onSubmit(){
+				if(this.$refs.form.validate()){
+					dialog : false,
+					this.$store.dispatch("addCard", {
+						title: this.title,
+						description: this.description,
+						comments: this.comments,
+						expired: this.expired
+					});
+				}
 			}
 		}
 	}

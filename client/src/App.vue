@@ -49,13 +49,6 @@
       </v-toolbar-title>  
 
       <v-spacer></v-spacer>
-
-      <!-- Buscador -->
-     <!-- <v-text-field
-       flex prepend-icon="search"
-       placeholder="Buscador.." color="accent" single-line hide-details>
-       </v-text-field> -->
-       <!-- <v-spacer></v-spacer> -->
        
        <!-- Links -->
        <v-toolbar-items class="hidden-xs-only">
