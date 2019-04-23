@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost';
 import router from './router';
 
 // QUERIES IMPORT
-import { GET_CURRENT_USER, GET_BOARDS, ADD_BOARD, SIGNIN_USER, SIGNUP_USER } from './queries';
+import { GET_CURRENT_USER, GET_BOARDS, ADD_BOARD, ADD_BOARDS_USER, SIGNIN_USER, SIGNUP_USER } from './queries';
 
 
 Vue.use(Vuex)
@@ -80,7 +80,7 @@ export default new Vuex.Store({
           variables: payload,
           update: (cache, {data: {addBoard}}) => {
             // Se lee el query que se quiere actualizar
-            const data = cache.readQuery({ query: GET_BOARDS});
+          /*  const data = cache.readQuery({ query: GET_BOARDS});
             // Crear los datos actualizados
             data.getBoard.unshift(addBoard);
             // Escribir los datos
@@ -88,6 +88,7 @@ export default new Vuex.Store({
               query: GET_BOARDS,
               data
             });
+          */
           },
           optimisticResponse: {
             __type: 'Mutation',
@@ -100,10 +101,23 @@ export default new Vuex.Store({
         })
         .then( ({data}) => {
           console.log(data.addBoard);
+        //  addBoardsUser(commit, {userId: payload.createdBy, boardId: data.addBoard._id});
         })
         .catch(err => {
           console.error(err);
         })
+    },
+    addBoardsUser: ({ commit }, payload) => {
+      apolloClient.mutate({
+        mutation: ADD_BOARDS_USER,
+        variables: payload
+      }).then( ({data}) => {
+        console.log("::::::::::::: RESULT");
+        console.log(data);
+      }).catch(err => {
+        console.error("==========");
+        console.error(err);
+      });
     },
     signinUser: ({ commit }, payload) => {
       commit('clearError');
@@ -156,8 +170,10 @@ export default new Vuex.Store({
         await apolloClient.resetStore();
         //volver a home
         router.push('/');
-    }
-  },
+    }, 
+        
+  },     
+
   getters: {
   	boards: state => state.boards,
     user: state => state.user,

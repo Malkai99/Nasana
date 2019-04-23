@@ -29,11 +29,11 @@ const UserSchema = new 	mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
-	board: {
+	board: [{
 		type: [mongoose.Schema.Types.ObjectId],
-		required: true,
+		required: false,
 		ref: 'Board'
-	}
+	}]
 
 });
 

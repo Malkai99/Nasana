@@ -6,8 +6,9 @@ type User {
 	avatar: String
 	created_at: String
 	modify_at: String
-	board: [Board]
+	board: [ID]
 }
+
 
 type Board {
 	_id: ID
@@ -43,10 +44,13 @@ type Query {
 	getCurrentUser: User
 	getBoard: [Board]
 	getBoardId(boardId: ID!): Board!
+	allUsers: [User!]!
+
 }
 
 type Mutation {
 	addBoard(title: String!,imageUrl: String, createdBy: ID!): Board!
+	addBoardsUser(userId: ID!, boardId: ID!): User!
 	signinUser(username: String!, password: String!): Token
 	signupUser(username: String!, email: String!, password: String!): Token
 }

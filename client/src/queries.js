@@ -1,4 +1,4 @@
-import {gql } from "apollo-boost";
+import {gql} from "apollo-boost";
 
 // BOARD QUERIES
 
@@ -41,7 +41,7 @@ export const GET_CURRENT_USER = gql`
 			avatar
 		}
 	}
-`
+`;
 
 // BOARDS MUTATIONS
 
@@ -59,6 +59,22 @@ export const ADD_BOARD = gql`
  		 }
 	} 
 `;
+
+export const ADD_BOARDS_USER = gql` 
+	mutation($userId: ID!, $boardId: ID!){
+		addBoardUser(_id: $userId, boardId: $boardId){
+			_id
+			username
+			email
+			password
+			avatar
+			board	
+		}
+
+	}
+`; 
+
+
 
 // USER MUTATIONS
 export const SIGNIN_USER = gql`

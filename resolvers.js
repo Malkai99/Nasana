@@ -20,7 +20,8 @@ module.exports = {
 			});
 			return user;
 
-		},
+		},	
+
 		getBoard: async (_, args, { Board }) => {
 			const boards = await Board.find({}).sort({ created_at: 'desc'}).populate({
 				path: 'createdBy',
@@ -46,6 +47,23 @@ module.exports = {
 			}).save();
 			return newBoard;
 		},
+
+		addBoardsUser: async (_, {userId, boardId }, {User}) => {
+			const user = await User.findOne({ _id: userId});
+			if(!user){
+				throw new Error('User not found');
+			}
+			if(user.board){
+				const indexFounded = user.board.findIndex(item => boardId.toString() === item.toString());
+				if(indexFounded >= 0){
+					throw new Error('Board is already exists');
+				}
+			}
+			user.board.push(boardId);
+			user.save();
+			return user;
+		},
+
 		signinUser: async (_, {username, password}, {User}) => {
 			const user = await User.findOne({ username });
 			if(!user){
@@ -72,3 +90,5 @@ module.exports = {
 		}
 	}
 }
+
+
