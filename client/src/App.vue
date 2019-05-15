@@ -39,44 +39,74 @@
 
     <!-- Navbar hotizontal  -->
 
-   <v-toolbar fixed color="primary">
-    <!-- Titulo de la App -->
-      <v-toolbar-side-icon @click="toggleSideNav"></v-toolbar-side-icon> 
-      <v-toolbar-title class="hidden-xs-only">
-        <router-link to="/" tag="span" style="cursor: pointer">
-          Nasana
-        </router-link>
-      </v-toolbar-title>  
+    <v-toolbar fixed color="primary">
+      <!-- Titulo de la App -->
+        <v-toolbar-side-icon @click="toggleSideNav"></v-toolbar-side-icon> 
+          <v-toolbar-title class="hidden-xs-only">
+          <router-link to="/" tag="span" style="cursor: pointer">
+            Nasana
+          </router-link>
+        </v-toolbar-title>  
 
       <v-spacer></v-spacer>
        
-       <!-- Links -->
-       <v-toolbar-items class="hidden-xs-only">
-         <v-btn flat v-for="item in horizontalNavItems" :key= "item.title" :to= "item.link">
-            <v-icon class="hidden-sm-only" left>{{item.icon}}</v-icon>
+      <!-- Links -->
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat v-for="item in horizontalNavItems" :key= "item.title" :to= "item.link">
+          <v-icon class="hidden-sm-only" left>{{item.icon}}</v-icon>
             {{item.title}}
-         </v-btn>
-
-          <!-- Boton Perfil -->
-          <v-btn flat to="/profile" v-if="user">
-            <v-icon class="hidden-sm-only" left>account_box</v-icon>
-            <v-badge rigth color="blue darken-2">
-              <!--slot puede ser cualquier componente o numero  -->
-               <!-- <span  slot="badge">1</span> --> 
-               Perfil
-              <!-- <v-icon large color="primary"></v-icon> -->
-            </v-badge>
           </v-btn>
 
-          <!-- Boton Cerrar sesion -->
-          <v-btn flat v-if="user" @click="handleSignoutUser">
-            <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>
-            Cerrar Sesion
-          </v-btn>
+      <!-- Boton Perfil -->
+        <v-menu  class="hidden-sm-only" v-if="user" v-model="menu":close-on-content-click="false":nudge-width="100" offset-x>
+          <template v-slot:activator="{ on }">
+            <v-btn flat v-on="on">
+              <v-icon class="hidden-sm-only" left>account_box</v-icon>
+                <v-badge rigth color="blue darken-2">
+                Perfil
+                </v-badge>
+            </v-btn>
+          </template>
 
-       </v-toolbar-items>
+          <v-card>
+            <v-list>
+             <v-list-tile avatar>
+              <v-list-tile-avatar>
+                  <v-avatar>
+                  <img v-bind:src="user.avatar" />
+                  </v-avatar>
+              </v-list-tile-avatar>
 
-   </v-toolbar>
+           <v-list-tile-content>
+              <v-list-tile-title>{{user.username}}</v-list-tile-title>
+                <v-list-tile-sub-title>Perfil</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+
+<!--          <v-list>
+             <v-list-tile>
+               <v-list-tile-action>
+                  <v-switch v-model="message" color="green"></v-switch>
+                </v-list-tile-action>
+               <v-list-tile-title>Notificaciones</v-list-tile-title>
+              </v-list-tile>
+            </v-list> 
+-->            
+
+            <v-card-actions>
+              <v-btn color="primary" flat to="/profile">
+                <v-icon class="hidden-sm-only" left>edit</v-icon>Editar</v-btn> 
+
+              <v-btn color="primary" flat v-if="user" @click="handleSignoutUser">
+                <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>Cerrar Sesion</v-btn> 
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+
+  
+  </v-toolbar-items>
+ </v-toolbar>
 
 
   <!-- Contenido de la App -->
@@ -116,11 +146,13 @@
 import { mapGetters } from 'vuex';
 export default {
   name: 'App',
-  data(){
+  data:() => {
     return{
       sideNav: false,
       authSnackbar: false,
-      authErrorSnackbar: false
+      authErrorSnackbar: false,
+      menu: false,
+      message: false
     }
   },
   watch: {
@@ -141,14 +173,13 @@ export default {
     ...mapGetters(['authError', 'user']),
     horizontalNavItems() {
       let items=  [
-        { icon: 'chat', title: 'Board', link: '/boards'},
         { icon: 'lock_open', title: 'Ingresar', link: '/signin'},
         { icon: 'create', title: 'Registrarse', link: '/signup'}
       ];
       if(this.user){
         items = [
           { icon: 'chat', title: 'Board', link: '/boards'}
-          // { icon:'account_box', title: 'Perfil', link: '/profile'}
+          //{ icon:'notification', title: '', link: '/boards'}
         ]
       }
       return items;
@@ -169,13 +200,16 @@ export default {
       return items;
     }
   },
+  joke: {
+    avatar: 'image.jpg'
+  },
   methods: {
     handleSignoutUser(){
       this.$store.dispatch('signoutUser');
+
     },
     toggleSideNav() {
       this.sideNav = !this.sideNav;
-
     }
   }
 };
@@ -192,11 +226,9 @@ export default {
   .fade-enter-active{
     transition-delay: 0.25s;
   }
-
   .fade-enter,
   .fade-leave-active {
     opacity: 0;
     transform: translateY(-25px);
   }
-
 </style>
