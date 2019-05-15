@@ -13,20 +13,34 @@ module.exports = {
 			if(!currentUser){
 				return null;
 			}
-
+			
 			const user = await User.findOne({username: currentUser.username}).populate({
 				path: 'board',
 				model: 'Board'
 			});
+			console.log(user);
 			return user;
 
 		},	
 
-		getBoard: async (_, args, { Board }) => {
-			const boards = await Board.find({}).sort({ created_at: 'desc'}).populate({
-				path: 'createdBy',
-				model: 'User'
+		getBoard: async (_, args, { Board, User, currentUser }) => {
+			var boards = [];
+			/*const user = await User.findOne({username: currentUser.username}).populate({
+				path: 'board',
+				model: 'Board',
 			});
+			if (user) {
+				boards = user.board;
+			}
+			return boards;*/
+			const user = await User.findOne({username: currentUser.username});
+			if (user) {
+				boards = await Board.find({createdBy: user._id}).sort({ created_at: 'desc'}).populate({
+					path: 'createdBy',
+					model: 'User'
+				});
+			}
+			
 			return boards;
 		},
 		getBoardId: async (_, {boardId}, { Board }) => {
@@ -39,12 +53,26 @@ module.exports = {
 	},
 
 	Mutation: {
-		addBoard: async (_, {title,imageUrl,createdBy}, { Board }) => {
+		addBoard: async (_, {title,imageUrl,createdBy}, { Board, User }) => {
 			const newBoard = await new Board({
 				title,
 				imageUrl,
 				createdBy : createdBy
 			}).save();
+
+			const user = await User.findOne({ _id: createdBy});
+			if(!user){
+				throw new Error('User not found');
+			}
+			if(user.board){
+				const indexFounded = user.board.findIndex(item => newBoard._id.toString() === item.toString());
+				if(indexFounded >= 0){
+					throw new Error('Board is already exists');
+				}
+			}
+			user.board.push(newBoard._id);
+			user.save();
+		
 			return newBoard;
 		},
 
